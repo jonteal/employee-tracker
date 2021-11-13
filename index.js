@@ -47,3 +47,38 @@ function initialPrompt() {
         }
     })
 };
+
+
+function viewDepartments() {
+
+};
+
+
+function viewRoles() {
+
+};
+
+
+function viewEmployees() {
+
+};
+
+
+function addDepartment() {
+
+};
+
+
+function addRole() {
+
+};
+
+
+function addEmployee() {
+
+};
+
+
+function updateEmployeeRole() {
+
+};
