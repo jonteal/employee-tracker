@@ -201,5 +201,42 @@ function addEmployee() {
 
 
 function updateEmployeeRole() {
-    userOptions();
+    db.query('SELECT * FROM company_db.employee;', function (err, results) {
+        let employeeNameArray = [];
+    results.forEach(result => employeeNameArray.push({ name: result.first_name + ' ' + result.last_name, value: result.id}));
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "updateEmployee",
+                message: "Which employee are you updating today?",
+                choices: employeeNameArray
+            },
+        ])
+
+        .then((answer) => {
+            let employeeID = answer.updateEmployee;
+        db.query('SELECT * FROM company_db.role;', function (err, results) {
+            let roleOptions = [];
+        results.forEach(result => roleOptions.push({ name: result.title, value: result.id}));
+            // console.log(roleOptions);
+
+            return inquirer.prompt([
+                {
+                    type: "list",
+                    name: "updateRole",
+                    message: "What is the employee's new role?",
+                    choices: roleOptions
+                }
+            ])
+
+        .then((answer) => {
+            let roleID = answer.updateRole;
+            
+            db.query('UPDATE company_db.employee SET role_id = ? WHERE id = ?', [roleID, employeeID], function (err, results) {
+                userOptions();
+            })
+        })
+        })
+        })
+    })
 };
