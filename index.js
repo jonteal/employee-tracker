@@ -136,7 +136,50 @@ function addRole() {
 
 
 function addEmployee() {
-    console.log("errors suck");
+    db.query('SELECT * FROM company_db.role;', function (err, results) {
+        let roleArray = [];
+    results.forEach(result => roleArray.push({ name: result.name, value: result.id}));
+    })
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "employeeFirstName",
+            message: "What is the employee's first name?"
+        },
+        {
+            type: "input",
+            name: "employeeLastName",
+            message: "What is the employee's last name?"
+        },
+        {
+            type: "input",
+            name: "employeeRole",
+            message: "What role will the employee have?"
+        },
+
+    ])
+    .then((answers) => {
+        let newFirstName = answers.employeeFirstName;
+        let newLastName = answers.employeeLastName;
+        let newEmployeeRole = answers.employeeRole;
+
+        db.query('SELECT * FROM company_db.employee;', function (err, results) {
+            let employeeNameArray = [];
+        results.forEach(result => employeeNameArray.push({ name: result.first_name + ' ' + result.last_name, value: result.id}));
+
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "employeeManager",
+                message: "Who is the employee's manager",
+                choices: employeeNameArray
+            },
+        ])
+        .then((answers) => {
+            console.lot(newEmployeeRole);
+        })
+        })
+    })
     userOptions();
 
 };
