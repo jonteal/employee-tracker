@@ -67,7 +67,7 @@ function viewDepartments() {
 
 
 function viewRoles() {
-    db.query('SELECT * FROM company_db.role;', function (err, results) {
+    db.query('SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;', function (err, results) {
         console.table(results);
         userOptions();
     })
@@ -75,7 +75,7 @@ function viewRoles() {
 
 
 function viewEmployees() {
-    db.query('SELECT * FROM company_db.employee;', function (err, results) {
+    db.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id', function (err, results) {
         console.table(results);
         userOptions();
     })
@@ -83,20 +83,35 @@ function viewEmployees() {
 
 
 function addDepartment() {
-    console.log("errors suck")
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "departmentName",
+            message: "What is the name of the department you would like to add?"
+        },
+    ])
+    .then(function (answer) {
+        console.log(answer.departmentName);
+        db.query
+    })
+    userOptions();
 };
 
 
 function addRole() {
-    console.log("errors suck")
+    console.log("errors suck");
+    userOptions();
 };
 
 
 function addEmployee() {
-    console.log("errors suck")
+    console.log("errors suck");
+    userOptions();
+
 };
 
 
 function updateEmployeeRole() {
-    console.log("errors suck")
+    console.log("errors suck");
+    userOptions();
 };
