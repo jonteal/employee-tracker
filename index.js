@@ -1,19 +1,28 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-
-// require('dotenv').config();
-
-// const db = mysql.createConnection(
-//     {
-//     }
-// );
+require('dotenv').config();
 
 
+const db = mysql.createConnection(
+    {
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
+    },
+    console.log('Connected to the employeetracker_db database.')
+);
+
+    db.connect( (err) => {
+    if (err){
+        throw error;
+    }
+});
 
 
-initialPrompt();
+userOptions();
 
-function initialPrompt() {
+function userOptions() {
     return inquirer.prompt([
         {
             type: "list",
@@ -50,35 +59,44 @@ function initialPrompt() {
 
 
 function viewDepartments() {
-
+    db.query('SELECT * FROM company_db.department;', function (err, results) {
+        console.table(results);
+        userOptions();
+    })
 };
 
 
 function viewRoles() {
-
+    db.query('SELECT * FROM company_db.role;', function (err, results) {
+        console.table(results);
+        userOptions();
+    })
 };
 
 
 function viewEmployees() {
-
+    db.query('SELECT * FROM company_db.employee;', function (err, results) {
+        console.table(results);
+        userOptions();
+    })
 };
 
 
 function addDepartment() {
-
+    console.log("errors suck")
 };
 
 
 function addRole() {
-
+    console.log("errors suck")
 };
 
 
 function addEmployee() {
-
+    console.log("errors suck")
 };
 
 
 function updateEmployeeRole() {
-
+    console.log("errors suck")
 };
