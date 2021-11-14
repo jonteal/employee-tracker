@@ -135,11 +135,19 @@ function addRole() {
 };
 
 
+// Add employee function.
 function addEmployee() {
+
+    // Uses the db.query to grab all current roles that are available in the database
     db.query('SELECT * FROM company_db.role;', function (err, results) {
+        
+        // Creating array variable to hold available roles
         let roleArray = [];
-    results.forEach(result => roleArray.push({ name: result.name, value: result.id}));
-    })
+
+        // Takes each result and pushes into the roleArray with it's title and id
+    results.forEach(result => roleArray.push({ name: result.title, value: result.id}));
+    
+    // Inquire prompt to ask first name, last name, and role the employee will have
     return inquirer.prompt([
         {
             type: "input",
@@ -152,12 +160,15 @@ function addEmployee() {
             message: "What is the employee's last name?"
         },
         {
-            type: "input",
+            type: "list",
             name: "employeeRole",
-            message: "What role will the employee have?"
+            message: "What role will the employee have?",
+            choices: roleArray // roleArray is the list of available roles gathered from the query above
         },
 
     ])
+
+    // Puts all answers into new arrays to be inserted into the database below
     .then((answers) => {
         let newFirstName = answers.employeeFirstName;
         let newLastName = answers.employeeLastName;
@@ -176,16 +187,19 @@ function addEmployee() {
             },
         ])
         .then((answers) => {
-            console.lot(newEmployeeRole);
+            console.log(newEmployeeRole);
+        let managerOptions = answers.employeeManager;
+            db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [newFirstName, newLastName, newEmployeeRole, managerOptions], function (err, results) {
+                console.log(err);
+            })
+            userOptions();
+        })
         })
         })
     })
-    userOptions();
-
 };
 
 
 function updateEmployeeRole() {
-    console.log("errors suck");
     userOptions();
 };
