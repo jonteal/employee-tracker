@@ -101,8 +101,37 @@ function addDepartment() {
 
 
 function addRole() {
-    console.log("errors suck");
-    userOptions();
+    db.query('SELECT * FROM company_db.department;', function (err, results) {
+        let departmentArray = [];
+    results.forEach(result => departmentArray.push({name: result.name, value: result.id}));
+    
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "roleName",
+            message: "What is the name of the role you would like to add?"
+        },
+        {
+            type: "input",
+            name: "roleSalary",
+            message: "What is the salary of this role?"
+        },
+        {
+            type: "list",
+            name: "roleDepartment",
+            message: "What department will this role work in?",
+            choices: departmentArray
+        }
+    ])
+    .then((answers) => {
+
+        db.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answers.roleName, answers.roleSalary, answers.roleDepartment], function (err, results) {
+            console.log(err);
+        })
+        userOptions();
+    })
+
+})
 };
 
 
