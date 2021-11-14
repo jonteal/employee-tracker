@@ -92,9 +92,11 @@ function addDepartment() {
     ])
     .then(function (answer) {
         console.log(answer.departmentName);
-        db.query
+        db.query("INSERT INTO department (name) VALUES (?)", [answer.departmentName], function (err, results) {
+
+        })
+        userOptions();
     })
-    userOptions();
 };
 
 
